@@ -22,7 +22,4 @@ Run at command line the following -
 
 ## Features To Be Added
 
-* Turn it into a bot which scrapes every few minutes
-* Print timestamp alongside notifications
-* URL parse and only say the URL basename when downloading page
 * Give it a GUI
