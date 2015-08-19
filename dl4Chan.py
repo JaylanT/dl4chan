@@ -1,6 +1,6 @@
 #! python3
 # dl4Chan.py - Downloads all images on 4Chan post
-# Usage: py dl4chan.py <4chan post URL>
+# Usage: py dl4chan.py <folder> <4chan URL>
 
 import requests, os, bs4, sys, re
 
