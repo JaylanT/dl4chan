@@ -8,7 +8,7 @@ Must be ran on command line.
 
 ## Setup
 
-Have Python3 installed on your computer.
+Have Python3 installed on your computer.`
 
 Make sure you have the following modules installed -
 
@@ -23,7 +23,6 @@ Run at command line the following -
 ## Features To Be Added
 
 * Turn it into a bot which scrapes every few minutes
-* Check for duplicate images already downloaded and skip it
 * 4chan URL could be pasted from pyperclip if not copied into cmd line
 * Print timestamp alongside notifications
 * URL parse and only say the URL basename when downloading page

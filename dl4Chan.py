@@ -26,7 +26,7 @@ except IndexError:
 	sys.exit(1)
 
 # Download and then parse the page
-print('Downloading page %s...' % url)
+print('Downloading PAGE %s...' % url)
 res = requests.get(url)
 res.raise_for_status()
 
@@ -41,19 +41,21 @@ else:
 		imgURL = "http:" + post.a['href']
 
 		# Download img to computer
-		print('Downloading image %s...' % (imgURL))
+		print('Downloading IMAGE %s...' % (imgURL))
 		res = requests.get(imgURL)
 		res.raise_for_status()
 		newFileName = os.path.join(newFolder, os.path.basename(imgURL))
-		imageFile = open(newFileName, 'wb')
-		for chunk in res.iter_content(1000000):
-			imageFile.write(chunk)
-		imageFile.close()
+		if not os.path.isfile(newFileName):
+			imageFile = open(newFileName, 'wb')
+			for chunk in res.iter_content(1000000):
+				imageFile.write(chunk)
+			imageFile.close()
+		else:
+			print('Duplicate file, skipping.')
 
 print('Done.')
 
-# make it scrape every few minutes
-# check for duplicates - if exist, skip
 # argv[2] could be pyperclip.paste() if missing from cmd line
+# make it scrape every few minutes
 # print timestamp alongside downloading image
 # url parse and only say the basename when dlin page
