@@ -4,6 +4,12 @@
 
 import requests, os, bs4, sys, re, time
 
+def updateTime():
+	"""Returns the current time"""
+	
+	newTime = '[' + time.strftime("%H:%M:%S") + '] '
+	return newTime
+
 def downloadImg(newFileName, imgURL, imgURLBasename):
 	"""Downloads the image to the folder
 
@@ -14,7 +20,7 @@ def downloadImg(newFileName, imgURL, imgURLBasename):
 	res = requests.get(imgURL)
 	res.raise_for_status()
 	
-	print(currentTime + 'Downloading IMAGE %s...' % (imgURLBasename))
+	print(updateTime() + 'Downloading IMAGE %s...' % (imgURLBasename))
 	imageFile = open(newFileName, 'wb')
 	for chunk in res.iter_content(1000000):
 		imageFile.write(chunk)
@@ -31,7 +37,7 @@ def downloadPage(newFolder, url):
 
 	while True:
 		try:
-			print(currentTime + 'Downloading PAGE %s...' % url)
+			print(updateTime() + 'Downloading PAGE %s...' % url)
 			res = requests.get(url)
 			res.raise_for_status()
 
@@ -47,7 +53,7 @@ def downloadPage(newFolder, url):
 					if not os.path.isfile(newFileName):
 						downloadImg(newFileName, imgURL, imgURLBasename)
 					else:
-						print(currentTime + 
+						print(updateTime() + 
 							'Skipping copied IMAGE %s...' % (imgURLBasename))
 			else:
 				print("No images were found.")		
@@ -90,6 +96,5 @@ def main():
 	print('Done.')
 
 visitedImgUrl = []
-currentTime = '[' + time.strftime("%H:%M:%S") + '] '
 
 if __name__ == "__main__": main()
