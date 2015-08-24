@@ -1,5 +1,5 @@
 #! python3
-# dl4Chan.py - Downloads all images on 4Chan post
+# dl4chan.py - Downloads all images on 4chan post
 # Usage: py dl4chan.py <folder> <4chan URL>
 
 import requests, os, bs4, sys, re, time
@@ -9,6 +9,13 @@ def updateTime():
 	
 	newTime = '[' + time.strftime("%H:%M:%S") + '] '
 	return newTime
+
+def saveURLToFile(folder, url):
+	s = [os.getcwd(), folder, '_src.txt']
+	location = os.path.join(*s) 
+	urlFile = open(location, 'wb')
+	urlFile.write(bytes(url, 'UTF-8'))
+	urlFile.close()
 
 def downloadImg(newFileName, imgURL, imgURLBasename):
 	"""Downloads the image to the folder
@@ -61,6 +68,7 @@ def downloadPage(newFolder, url):
 			print('Will check again in 60s (Press Ctrl+C to cancel)')
 			time.sleep(60)
 		except KeyboardInterrupt:
+			saveURLToFile(newFolder, url)
 			print('Done and exiting.')
 			exit()
 
