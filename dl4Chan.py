@@ -34,7 +34,7 @@ def downloadImg(newFileName, imgURL, imgURLBasename):
 	imageFile.close()
 	visitedImgUrl.append(imgURL)
 
-def downloadPage(newFolder, url):
+def downloadPage(newFolder, url, title):
 	"""Downloads and parses the HTML page.
 	Continually check for updates on page every 60s.
 
@@ -42,9 +42,13 @@ def downloadPage(newFolder, url):
 	newFolder -- the folder to contain images
 	url -- the url of HTML page"""
 
+	firstRun = True
+
 	while True:
 		try:
-			print(updateTime() + 'Downloading PAGE %s...' % url)
+			if firstRun:
+				print(updateTime() + 'Downloading PAGE %s...' % url)
+
 			res = requests.get(url)
 			res.raise_for_status()
 
@@ -53,18 +57,27 @@ def downloadPage(newFolder, url):
 
 			if postElem:
 				for post in postElem:
+					if title:
+						content = post.a.contents[0]
+						if not title in content:
+							"""Check spoilered images"""
+							if post.has_attr('title'):
+								if not title in post['title']: continue
+							else: continue
+
 					imgURL = "http:" + post.a['href']
 					imgURLBasename = os.path.basename(imgURL)
 					newFileName = os.path.join(newFolder, imgURLBasename)
 
 					if not os.path.isfile(newFileName):
 						downloadImg(newFileName, imgURL, imgURLBasename)
-					else:
+					elif firstRun:
 						print(updateTime() + 
 							'Skipping copied IMAGE %s...' % (imgURLBasename))
 			else:
 				print("No images were found.")		
 
+			firstRun = False;
 			print('Will check again in 60s (Press Ctrl+C to cancel)')
 			time.sleep(60)
 		except KeyboardInterrupt:
@@ -93,6 +106,10 @@ def main():
 	try:
 		newFolder = sys.argv[1]
 		url = sys.argv[2]
+		title = ""
+
+		if len(sys.argv) == 4:
+			title = sys.argv[3]
 
 		isFolderNameValid(newFolder)
 		os.makedirs(newFolder, exist_ok=True)
@@ -100,7 +117,7 @@ def main():
 		print("Index Error:\nUsage- dl4chan.py <folder> <URL> - missing folder or URL")
 		exit()
 
-	downloadPage(newFolder, url)
+	downloadPage(newFolder, url, title)
 	print('Done.')
 
 visitedImgUrl = []
